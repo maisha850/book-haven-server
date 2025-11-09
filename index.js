@@ -28,6 +28,12 @@ app.get('/books' , async(req , res)=>{
   const result = await cursor.toArray()
   res.send(result)
 })
+app.post('/books' , async(req , res)=>{
+  const data = req.body;
+  console.log(data)
+  const result = await booksCollection.insertOne(data)
+  res.send(result)
+})
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
