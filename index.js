@@ -55,6 +55,11 @@ app.get('/books' , async(req , res)=>{
   const result = await cursor.toArray()
   res.send(result)
 })
+app.get('/latest-book', async(req, res)=>{
+  const cursor = booksCollection.find().sort({created_at : -1}).limit(6)
+  const result = await cursor.toArray()
+  res.send(result)
+})
 app.post('/books' , async(req , res)=>{
   const data = req.body;
   console.log(data)
@@ -67,12 +72,12 @@ app.get('/books/:id', verifyToken, async(req , res)=>{
   const result = await booksCollection.findOne(query)
   res.send(result)
 })
-app.put('/books/:id', verifyToken ,async(req , res)=>{
+app.put('/books/:id', verifyToken , async(req , res)=>{
   const id = req.params.id
   const data =req.body;
   const query = {_id : new ObjectId(id)}
   const update = {
-    $set: data
+    $set: data,
   }
   const result = await booksCollection.updateOne(query , update) 
   res.send(result)
