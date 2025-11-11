@@ -60,6 +60,15 @@ app.get('/latest-book', async(req, res)=>{
   const result = await cursor.toArray()
   res.send(result)
 })
+app.get('/myBooks', verifyToken , async(req , res)=>{
+const email = req.query.userEmail;
+const query = {}
+if(email){
+  query.userEmail = email
+}
+const result = await booksCollection.find({userEmail: email}).toArray()
+res.send(result)
+})
 app.post('/books' , async(req , res)=>{
   const data = req.body;
   console.log(data)
