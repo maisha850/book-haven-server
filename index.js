@@ -51,7 +51,7 @@ async function run() {
 const db = client.db('books_haven')
 const booksCollection = db.collection('books')
 app.get('/books' , async(req , res)=>{
-  const cursor = booksCollection.find()
+  const cursor = booksCollection.find().sort({rating: -1})
   const result = await cursor.toArray()
   res.send(result)
 })
@@ -81,12 +81,25 @@ app.get('/books/:id', verifyToken, async(req , res)=>{
   const result = await booksCollection.findOne(query)
   res.send(result)
 })
-app.put('/books/:id', verifyToken , async(req , res)=>{
+app.get('/updateBooks/:id', async(req , res)=>{
+  const id = req.params.id
+  const query = {_id : new ObjectId(id)}
+  const result = await booksCollection.findOne(query)
+  res.send(result)
+})
+app.patch('/updateBooks/:id',  async(req , res)=>{
   const id = req.params.id
   const data =req.body;
   const query = {_id : new ObjectId(id)}
   const update = {
-    $set: data,
+    $set: {
+      title : data.title ,
+  author : data.author,
+  genre : data.genre,
+  rating : data.rating,
+  summary : data.summary,
+  coverImage : data.coverImage,
+    }
   }
   const result = await booksCollection.updateOne(query , update) 
   res.send(result)
