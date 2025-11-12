@@ -50,9 +50,23 @@ async function run() {
   await client.connect();
 const db = client.db('books_haven')
 const booksCollection = db.collection('books')
+const commentCollection = db.collection('comments')
 app.get('/books' , async(req , res)=>{
   const cursor = booksCollection.find().sort({rating: -1})
   const result = await cursor.toArray()
+  res.send(result)
+})
+app.get('/comments/:id' , async(req , res)=>{
+  const id = req.params.id;
+  const query = {book_id : id}
+  const cursor = commentCollection.find(query)
+  const result = await cursor.toArray()
+  res.send(result)
+})
+app.post('/comments' , async(req , res)=>{
+  const data = req.body;
+  console.log(data)
+  const result = await commentCollection.insertOne(data)
   res.send(result)
 })
 app.get('/featuredBooks' , async(req , res)=>{
@@ -80,6 +94,7 @@ app.post('/books' , async(req , res)=>{
   const result = await booksCollection.insertOne(data)
   res.send(result)
 })
+
 app.get('/books/:id', verifyToken, async(req , res)=>{
   const id = req.params.id
   const query = {_id : new ObjectId(id)}
