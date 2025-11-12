@@ -55,6 +55,11 @@ app.get('/books' , async(req , res)=>{
   const result = await cursor.toArray()
   res.send(result)
 })
+app.get('/featuredBooks' , async(req , res)=>{
+  const cursor = booksCollection.find().sort({rating: -1}).limit(7)
+  const result = await cursor.toArray()
+  res.send(result)
+})
 app.get('/latest-book', async(req, res)=>{
   const cursor = booksCollection.find().sort({created_at : -1}).limit(6)
   const result = await cursor.toArray()
