@@ -5,6 +5,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const admin = require("firebase-admin");
 const serviceAccount = require("./book-haven-firebase-adminsdk.json");
 const port = process.env.PORT || 3000
+require('dotenv').config();
 app.use(cors())
 app.use(express.json())
 
@@ -17,7 +18,7 @@ admin.initializeApp({
 
 
 
-const uri = "mongodb+srv://bookHaven:ciZnOzzKdbPpX1si@cluster0.6aaggy0.mongodb.net/?appName=Cluster0";
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.6aaggy0.mongodb.net/?appName=Cluster0`;
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
