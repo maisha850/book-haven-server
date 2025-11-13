@@ -101,6 +101,12 @@ app.get('/books/:id', verifyToken, async(req , res)=>{
   const result = await booksCollection.findOne(query)
   res.send(result)
 })
+app.get('/dltBooks/:id', async(req , res)=>{
+  const id = req.params.id
+  const query = {_id : new ObjectId(id)}
+  const result = await booksCollection.findOne(query)
+  res.send(result)
+})
 app.get('/updateBooks/:id', async(req , res)=>{
   const id = req.params.id
   const query = {_id : new ObjectId(id)}
@@ -124,7 +130,7 @@ app.patch('/updateBooks/:id',  async(req , res)=>{
   const result = await booksCollection.updateOne(query , update) 
   res.send(result)
 })
-app.delete( '/books/:id' , verifyToken , async(req , res)=>{
+app.delete( '/dltBooks/:id',  async(req , res)=>{
  const id = req.params.id;
  const query = { _id: new ObjectId(id)}
  const result = await booksCollection.deleteOne(query)
