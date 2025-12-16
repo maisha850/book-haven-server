@@ -3,12 +3,14 @@ const app = express()
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const admin = require("firebase-admin");
-const serviceAccount = require("./book-haven-firebase-adminsdk.json");
 const port = process.env.PORT || 3000
 require('dotenv').config();
 app.use(cors())
 app.use(express.json())
 
+// index.js
+const decoded = Buffer.from(process.env.FIREBASE_SERVICE_KEY, "base64").toString("utf8");
+const serviceAccount = JSON.parse(decoded);
 
 
 
@@ -48,7 +50,7 @@ app.get('/' , (req , res)=>{
 
 async function run() {
   try {
-  await client.connect();
+  // await client.connect();
 const db = client.db('books_haven')
 const booksCollection = db.collection('books')
 const commentCollection = db.collection('comments')
@@ -137,8 +139,8 @@ app.delete( '/dltBooks/:id',  async(req , res)=>{
  const result = await booksCollection.deleteOne(query)
  res.send(result)
 })
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    // await client.db("admin").command({ ping: 1 });
+    // console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
 
     // await client.close();
